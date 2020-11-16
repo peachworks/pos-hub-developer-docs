@@ -69,17 +69,17 @@ The method for POS Token authorization is to include an "Authorization:" header 
 
 The schemas defining what you see below are avaliable at the following links:
 
-* [Configuration Schema|https://hub.peachworks.com/v1/schemas/config] (relaxNG)
-* [Configuration Schema|https://hub.peachworks.com/v1/schemas/config?type=xsd] (XSD)
-* [Transaction Schema|https://hub.peachworks.com/v1/schemas/transactions] (relaxNG)
-* [Transaction Schema|https://hub.peachworks.com/v1/schemas/transactions?type=xsd] (XSD)
+* https://hub.peachworks.com/v1/schemas/config (relaxNG)
+* https://hub.peachworks.com/v1/schemas/config?type=xsd (XSD)
+* https://hub.peachworks.com/v1/schemas/transactions (relaxNG)
+* https://hub.peachworks.com/v1/schemas/transactions?type=xsd (XSD)
 
 ## Examples
 
 Examples files showing the XML are available at the following links:
 
-* [Configuration XML Example|https://hub.peachworks.com/v1/examples/config]
-* [Transaction XML Example|https://hub.peachworks.com/v1/examples/transactions]
+* https://hub.peachworks.com/v1/examples/config
+* https://hub.peachworks.com/v1/examples/transactions
 
 ----
 
