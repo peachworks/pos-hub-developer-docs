@@ -19,7 +19,7 @@ In order to send your POS data to Peach, you'll need an account with a subscript
 
 Once you have account credentials,
 
-* Go to https://my.getbeyond.com and enter your username and password
+* Go to https://my.getbeyond.com and enter your username and password
 * click on the POS Hub application icon
 ** Enter the System Setup wizard
 ** There is an option in the first step of the wizard to choose a POS system.  Select "Direct".
