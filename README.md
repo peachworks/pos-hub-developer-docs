@@ -6,6 +6,7 @@ POS Hub creates a 2-way connection between one or more POS systems and Beyond On
 
 The schemas against which the XML is validated are available in two formats for config, [rng|^config_1.0.grammar.rng] and [xsd|^config_1.0.grammar.xsd], and transactions, [rng|^transactions_1.0.grammar.rng] and [xsd|^transactions_1.0.grammar.xsd].
 
+
 We also have sample files for [config|^sample_config.xml] and [transactions|^sample_transactions.xml] as reference.  Sometimes it's just easier to see "real" examples than read a definition.
 
 All these files are also included at the bottom of this document in their full form.
@@ -25,7 +26,7 @@ Once you have account credentials,
 ** In the next step, select the locations (which individual restaurants) you want to set up on that system
 * On the final step, we generate a pos_token for each location selected, and display it for you.
 ** The pos_token is hashed and contains the source, location, account IDs and the account_token
-* *The POS customer must use that pos_token when sending us data*
+* **The POS customer must use that pos_token when sending us data**
 
 ----
 
@@ -33,9 +34,24 @@ Once you have account credentials,
 
 We use a RESTful API.
 
-These are resources used to add/remove data from POS Hub:Authentication/authorization
+These are resources used to add/remove data from POS Hub
 
-## POS Token authentication
+| URL                                                                                           | Methods     | Description                                                                                                                                                            |
+| --------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [https://hub.peachworks.com/v1/config](https://hub.whentomanage.com/v1/config)                | POST        | Used to add configuration data for all types of transactions.                                                                                                          |
+| [https://hub.peachworks.com/v1/transactions](https://hub.whentomanage.com/v1/transactions)    | POST        | Used to add all transaction data.                                                                                                                                      |
+| [https://hub.peachworks.com/v1/pos\_token](https://hub.peachworks.com/v1/pos_token)           | POST,DELETE | Used to add or remove a pos\_token                                                                                                                                     |
+| [https://hub.peachworks.com/v1/checks](https://hub.whentomanage.com/v1/checks)                | DELETE      | Used to remove check data.                                                                                                                                             |
+| [https://hub.peachworks.com/v1/paid\_inouts](https://hub.whentomanage.com/v1/paid_inouts)     | DELETE      | Used to remove payin/payout data.                                                                                                                                      |
+| [https://hub.peachworks.com/v1/deposits](https://hub.whentomanage.com/v1/deposits)            | DELETE      | Used to remove bank deposit data.                                                                                                                                      |
+| [https://hub.peachworks.com/v1/shifts](https://hub.whentomanage.com/v1/shifts)                | DELETE      | Used to remove actual shift data.                                                                                                                                      |
+| [https://hub.peachworks.com/v1/validate/config](https://hub.whentomanage.com/v1/shifts)       | POST        | Post an XML file to validate it                                                                                                                                        |
+| [https://hub.peachworks.com/v1/validate/transactions](https://hub.whentomanage.com/v1/shifts) | POST        | Post an XML file to validate it                                                                                                                                        |
+| [https://hub.peachworks.com/v1/scheduled\_shifts](https://hub.whentomanage.com/v1/shifts)     | GET         | Used to retrieve scheduling data (only with labor app).                                                                                                                |
+| [https://hub.peachworks.com/v1/instructions](https://hub.peachworks.com/v1/instructions)      | GET         | Let the server indicate to the client which days need reloaded
+
+
+## Authentication/authorization
 
 The type of authentication is using a _pos_token_, as it is the simplest method with the least amount of data to copy and know about.
 
@@ -73,7 +89,7 @@ Config data is consists of definitions for the following things
 
 * Categories - list of sales categories (ex. Apps, Entrees, Desserts)
 * Items - list of sales items (ex. Pizza, Burger, Wings)
-* _Order Types - list of order types (ex. Table, Tab, Delivery) - Planned for FUTURE development_
+* Order Types - list of order types (ex. Table, Tab, Delivery) 
 * Revenue Centers - list of revenue centers (ex. Dining Room, Bar, Drive Thru)
 * Voids - list of void reasons (ex. 86'd, Server Error)
 * Discounts - list of discounts (ex. Guest Satisfaction, 10% Off, $5 Off)
@@ -84,41 +100,40 @@ Config data is consists of definitions for the following things
 * Jobs - list of jobs (ex. Server, Cashier, Bartender)
 
 
-
 > The "id" field for these can be a number or a string.\\ \\
 > A string ID is helpful in cases where a numeric ID is not available. For example, if a category named "Apps" did not have an ID, you can also use "Apps" as the ID.
 
 
 ## Master Lists & Mapping
 
-## How Mapping Works
+### How Mapping Works
 
-1. Config Data.
+#### Config Data
 
 We treat each _config data set_ as _unique to the selected location_ and source, and then we map these data sets to the _master list_ for each config type.
 
 EXAMPLE:  If a POS sends the item "Wings" as part of the config data set, and it has not been added _from the source and location sending it_, Peach will:
 
 * check for an existing master item called "Wings" 
-** if found, this "Wings" would map to the master "Wings";  
-** if not found, Peach would create a new _master item_ called "Wings".
+   * if found, this "Wings" would map to the master "Wings";  
+   * if not found, Peach would create a new _master item_ called "Wings".
 
-*So the same item in multiple locations and/or sources can map to a single master item.*
+**So the same item in multiple locations and/or sources can map to a single master item.**
 
 
 > In POS Hub, a user can always remap items to a different master.
 
-2. Other Data.
+#### Other Data
 
 For all other data, the mapping procedure is similar, in that the relevant fields will first be looked for in the individual location and then the master list.  Here is the process step-by-step for (as an example) a piece of data of type "discount":
 
-   1.  Upon upload, the POS Hub system will look at the combination of source + location + pos_discount_ id to determine where to look
-   1. If all match an existing POS discount in the mapping table, it will then look at the name (the mapping field, as defined in this document, for /discount)
-      1.  If the name is the same, no changes to the list will occur - a discount with that name already exists, and will simply be recorded
-      1. If the name of the discount has changed from what is in pos_discount_id, the name in the mapping table will get updated _and_ a new wtm master item will be created.  If there are no other pos discounts in the original master, the master would be empty and would get auto-deleted.
-   1. If the source, location, or pos_discount_ id do not match (or do not exist), Hub will then look to see if a _master_ item exists with the same name  
+1.  Upon upload, the POS Hub system will look at the combination of source + location + pos_discount_ id to determine where to look
+1. If all match an existing POS discount in the mapping table, it will then look at the name (the mapping field, as defined in this document, for /discount)
+  1.  If the name is the same, no changes to the list will occur - a discount with that name already exists, and will simply be recorded
+  1. If the name of the discount has changed from what is in pos_discount_id, the name in the mapping table will get updated _and_ a new wtm master item will be created.  If there are no other pos discounts in the original master, the master would be empty and would get auto-deleted.
+1. If the source, location, or pos_discount_ id do not match (or do not exist), Hub will then look to see if a _master_ item exists with the same name  
    1. If there is a master with the same name, the new pos_discount_ id is added to the mapping table and assigned to the matching master item
-      1. if there is not a master with the same name, we create a new master item and map the POS item to it
+   1. if there is not a master with the same name, we create a new master item and map the POS item to it
 
 ### Further notes on mapping:
 
@@ -133,12 +148,9 @@ For all other data, the mapping procedure is similar, in that the relevant field
 Categories are sales categories for items and can be hierarchical.
 
 * ID and NAME are required. 
-* Maps on *"name" + "parent_id"*.
+* Maps on **"name" + "parent_id"**
 
-\\
-
-
-{code}
+```
 // XML
 
 <category>
@@ -146,20 +158,16 @@ Categories are sales categories for items and can be hierarchical.
 	<name>Apps</name>
 	<parent_id>2</parent_id>
 </category>
+```
 
-{code}
-
-h2. Items
+### Items
 
 Items for sale.
 
 * ID and NAME are REQUIRED. 
-* Maps on *"name" + "category_id"*.
+* Maps on **"name" + "category_id"**
 
-\\
-
-
-{code}
+```
 // XML
 <item>
     <id>1</id>
@@ -168,85 +176,69 @@ Items for sale.
     <price>8.99</price>
     <sku>7A12345-WHT-X</sku>
 </item>
+```
 
-{code}
-
-h2. Revenue Centers
+### Revenue Centers
 
 Revenue centers.
 
 * ID and NAME are REQUIRED. 
-* Maps on *"name"*.
+* Maps on **"name"**.
 
-\\
-
-
-{code}
+```
 // XML
 <revenue_center>
     <id>8</id>
     <name>Takeout</name>
 </revenue_center>
+```
 
-{code}
-
-h2. Order Types
+### Order Types
 
 Order types.
 
 * ID and NAME are REQUIRED. 
-* Maps on *"name"*.
+* Maps on **"name"**
 
-\\
-
-
-{code}
+```
 // XML
 <order_type>
     <id>8</id>
     <name>Drive Thru</name>
 </order_type>
+```
 
-{code}
-
-h2. Voids
+### Voids
 
 Voids and their reasons.
 
 * ID and NAME are REQUIRED. 
-* Maps on *"name"*.
+* Maps on **"name"**.
 
-\\
-
-
-{code}
+```
 // XML
 <void>
     <id>11</id>
    	<name>Spilled/Dropped</name>
 </void>
+```
 
-{code}
-
-h2. Discounts
+### Discounts
 
 Discount types.
 
 * ID and NAME are REQUIRED. 
 * Maps on *"name"*.
 
-\\
-
-
-{code}
+```
 // XML
 <discount>
     <id>9</id>
    	<name>Birthday Dessert</name>
 </discount>
-{code}
+```
 
-h2. Customer (House) Accounts
+## Customer (House) Accounts
 
 House accounts (i.e. customer accounts for in-house tabs and similar):  These use "customer_accounts" as their API object, but are referred to on the front-end as "House Accounts", for consistency reasons.
 
