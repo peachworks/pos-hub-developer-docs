@@ -690,6 +690,10 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 
 ## Optional Fields
 
+| Field        | Type   | Description                      |
+| ------------ | ------ | -------------------------------- |
+| employee\_id | object | employee who entered the deposit |
+
 ## Sample XML
 
 ```
@@ -717,6 +721,14 @@ Additional parameters maybe be supplied if a specific date range is needed.
 
 * All timestamps may include a timezone, e.g. "2017-03-01T07:30:00-04:00" for specificity.  If no timezone is present on the timestamp then "local store time" is assumed.
 * "start" and "end" may be bare dates "2017-03-20", which will return the whole business day's shifts.
+
+| Optional Parameters (names case sensitive) | Description                                                                                                                                                                                                                                                             |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| start                                      | beginning timestamp of range for which to fetch scheduled shifts. Inclusive. YYYY-MM-DDTHH:mm:ss format. When "start" is omitted "end" will be ignored                                                                                                                                  |
+| end                                        | ending timestamp of range for which to fetch scheduled shifts.  Inclusive YYYY-MM-DDTHH:mm:ss format. When "end" is omitted "start" will return all shifts after start time. If included, "end" should be no later than four weeks from today.  Otherwise an error status is returned. |
+| modified                                   | timestamp - fetch all shifts modified since the given time. shifts earlier than "today" are not included. YYYY-MM-DDTHH:mm:ss format. Supplying a "modified" parameter will cause the "start" and "end" to be ignored.                                                                 |
+| include\_names                             | Boolean.  Include the POS names for employees, **<first + " " + last\>** in one field, and jobs. (Most of the time you don't want this, unless it's for a system like Aloha that uses names in the export.)
+                                                                      |
 
 ## Response
 Returned data will include the followinge
