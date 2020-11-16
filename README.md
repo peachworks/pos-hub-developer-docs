@@ -1,13 +1,20 @@
 # Overview
+
 The POS Hub API allows for the simple integration of a POS system with the Beyond One Platform. 
 
-See the [wiki](https://github.com/getbeyond/pos-hub-developer-docs/wiki) for developer documentation.
+POS Hub creates a 2-way connection between one or more POS systems and Beyond One. The app gives users an easy way to standardize menu item names and connect shift or sales data to use with other solutions. 
+
+The schemas against which the XML is validated are available in two formats for config, [rng|^config_1.0.grammar.rng] and [xsd|^config_1.0.grammar.xsd], and transactions, [rng|^transactions_1.0.grammar.rng] and [xsd|^transactions_1.0.grammar.xsd].
+
+We also have sample files for [config|^sample_config.xml] and [transactions|^sample_transactions.xml] as reference.  Sometimes it's just easier to see "real" examples than read a definition.
+
+All these files are also included at the bottom of this document in their full form.
 
 ----
 
 # Setting Up a POS Hub Test Account
 
-In order to send your POS data to Peach, you'll need an account with a subscription to the POS Hub App. (Contact us at [sales@peachworks.com|mailto:sales@peachworks.com] or [on our website|http://peachworks.com/contact/] to get a free demo subscription.)
+In order to send your POS data to Peach, you'll need an account with a subscription to the POS Hub App. 
 
 Once you have account credentials,
 
@@ -28,25 +35,21 @@ We use a RESTful API.
 
 These are resources used to add/remove data from POS Hub:Authentication/authorization
 
-h3. POS Token authentication
+## POS Token authentication
 
 The type of authentication is using a _pos_token_, as it is the simplest method with the least amount of data to copy and know about.
 
 The method for POS Token authorization is to include an "Authorization:" header in the HTTP headers.  The content of this header is the pos_token:
 
-{noformat}
+```
      curl -X DELETE "[https://hub.peachworks.com/v1/things|https://api.peachworks.com/v1/app_objects/272]" -H "Authorization: ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn…"
-{noformat}
-
-
-\\
-
+```
 
 ----
 
-h1. Viewing Schemas and Example Data
+# Viewing Schemas and Example Data
 
-h2. Schemas
+## Schemas
 
 The schemas defining what you see below are avaliable at the following links:
 
@@ -55,19 +58,16 @@ The schemas defining what you see below are avaliable at the following links:
 * [Transaction Schema|https://hub.peachworks.com/v1/schemas/transactions] (relaxNG)
 * [Transaction Schema|https://hub.peachworks.com/v1/schemas/transactions?type=xsd] (XSD)
 
-h2. Examples
+## Examples
 
 Examples files showing the XML are available at the following links:
 
 * [Configuration XML Example|https://hub.peachworks.com/v1/examples/config]
 * [Transaction XML Example|https://hub.peachworks.com/v1/examples/transactions]
 
-\\
-
-
 ----
 
-h1. Configuration Data
+# Configuration Data
 
 Config data is consists of definitions for the following things
 
@@ -83,16 +83,15 @@ Config data is consists of definitions for the following things
 * Employees - list of employees 
 * Jobs - list of jobs (ex. Server, Cashier, Bartender)
 
-\\
 
 
-{info}
-The "id" field for these can be a number or a string.\\ \\
-A string ID is helpful in cases where a numeric ID is not available. For example, if a category named "Apps" did not have an ID, you can also use "Apps" as the ID.{info}
+> The "id" field for these can be a number or a string.\\ \\
+> A string ID is helpful in cases where a numeric ID is not available. For example, if a category named "Apps" did not have an ID, you can also use "Apps" as the ID.
 
-h2. Master Lists & Mapping
 
-h2. How Mapping Works
+## Master Lists & Mapping
+
+## How Mapping Works
 
 1. Config Data.
 
@@ -106,32 +105,30 @@ EXAMPLE:  If a POS sends the item "Wings" as part of the config data set, and i
 
 *So the same item in multiple locations and/or sources can map to a single master item.*
 
-{info}
-In POS Hub, a user can always remap items to a different master.{info}
+
+> In POS Hub, a user can always remap items to a different master.
 
 2. Other Data.
 
 For all other data, the mapping procedure is similar, in that the relevant fields will first be looked for in the individual location and then the master list.  Here is the process step-by-step for (as an example) a piece of data of type "discount":
 
-# Upon upload, the POS Hub system will look at the combination of source + location + pos_discount_ id to determine where to look
-# If all match an existing POS discount in the mapping table, it will then look at the name (the mapping field, as defined in this document, for /discount)
-## If the name is the same, no changes to the list will occur - a discount with that name already exists, and will simply be recorded
-## If the name of the discount has changed from what is in pos_discount_id, the name in the mapping table will get updated _and_ a new wtm master item will be created.  If there are no other pos discounts in the original master, the master would be empty and would get auto-deleted.
-# If the source, location, or pos_discount_ id do not match (or do not exist), Hub will then look to see if a _master_ item exists with the same name  
-## If there is a master with the same name, the new pos_discount_ id is added to the mapping table and assigned to the matching master item
-## if there is not a master with the same name, we create a new master item and map the POS item to it
+   1.  Upon upload, the POS Hub system will look at the combination of source + location + pos_discount_ id to determine where to look
+   1. If all match an existing POS discount in the mapping table, it will then look at the name (the mapping field, as defined in this document, for /discount)
+      1.  If the name is the same, no changes to the list will occur - a discount with that name already exists, and will simply be recorded
+      1. If the name of the discount has changed from what is in pos_discount_id, the name in the mapping table will get updated _and_ a new wtm master item will be created.  If there are no other pos discounts in the original master, the master would be empty and would get auto-deleted.
+   1. If the source, location, or pos_discount_ id do not match (or do not exist), Hub will then look to see if a _master_ item exists with the same name  
+   1. If there is a master with the same name, the new pos_discount_ id is added to the mapping table and assigned to the matching master item
+      1. if there is not a master with the same name, we create a new master item and map the POS item to it
 
-h3. Further notes on mapping:
+### Further notes on mapping:
 
 * if the app admin changes a wtm master item name in Hub, those changes will stay and the pos item will remain mapped to this master on subsequent syncs
 * if the app admin changes a wtm master item name in Hub and then the name changes on the POS, a new name is recognized and a new master item is created.  The original wtm master item will be empty and thus auto-deleted
 
-\\
 
+## Mapping Objects
 
-h3. Mapping Objects
-
-h2. Categories
+### Categories
 
 Categories are sales categories for items and can be hierarchical.
 
