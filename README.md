@@ -613,10 +613,10 @@ POST https://hub.peachworks.com/v1/checks
 ## Updating Check Data
 Send the updated check data exactly as you would if adding it for the first time. If the check ID already exists, the data will be updated.
 
-> If you're unsure of changes within individual checks, it is often simpler (and less error prone) to delete the checks for an hour or day and then add them again.
+> If you're unsure of changes within individual checks, it is often simpler (and less error prone) to delete the checks for a period of time and then add them again.
 
 ## Deleting Check Data
-If Deleting the check data in order to reload it, see "Reloading Check Data" below to eliminate the need for a separate API request for deletion.
+If deleting  check data in order to reload it, see "Reloading Check Data" below to eliminate the need for a separate API request for deletion.
 
 ### Deleting Checks By Day
 
@@ -772,7 +772,7 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 | break\_pay     | decimal(2) | total cost for this break ($0 if unpaid break)    |
 
 
-## Sample XML
+## Adding Shift Data
 ```xml
 <shift>
     <id>50751</id>
@@ -804,6 +804,71 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
     </break>
 </shift>
 ```
+
+## Updating Shift Data
+Send the updated shift data exactly as you would if adding it for the first time. If the shift ID already exists, the data will be updated.
+
+> If you're unsure of changes within an individual shift, it is often simpler (and less error prone) to delete the shifts for a period of time and then add them again.
+
+## Deleting Shift Data
+If deleting shift data in order to reload it, see "Reloading Check Data" below to eliminate the need for a separate API request for deletion.
+
+### Deleting Shifts By Day
+
+* start_date and end_date are required and it can be either an ISO date or an array of ISO dates
+* If any shifts on any date provided can't be deleted for any reason this will return an error and nothing deleted
+   * Returns 400 `{"status":"error", "message":"Could not delete shifts: <comma separated list of shift ids>. Nothing was deleted."}`
+* Returns 200 `{"status":"success", "delete_count":_integer_}` on success
+* When deciding the date to delete, use shift.business_date
+
+#### Example Request
+```
+DELETE /v1/shifts
+Authorization: eukj3pos_token…
+{
+  "start_date":"2013-08-28",
+  "end_date":"2013-08-28",
+}
+  
+Returns
+200
+{
+  "status":"success",
+  "delete_count":153
+}
+```
+
+#### Example Curl Request
+`curl -X DELETE --form start_date=2013-08-28 --form end_date=2013-08-28 -H "Authorization: $TOKEN" https://hub.peachworks.com/v1/shifts`
+
+### Deleting Shifts By ID
+* "ids" is used and can be either one shift id or an array of shift ids
+* If any shifts can't be deleted for any reason this will return an error and nothing deleted
+   * 400 {"status":"error", "message":"Could not delete shifts: <comma separated list of shift ids>. Nothing was deleted."}
+	
+#### Example Request
+```
+DELETE /v1/shifts
+Authorization: eukj3pos_token…
+{
+  "ids":["304773739739","30477373974","3047737392"],
+//or
+ "ids":"304773739739",  <-- note this also should work for one check_id
+}
+  
+Returns
+200
+{
+  "status":"success",
+  "delete_count":3
+}
+```
+
+#### Example Curl Request
+`curl -X DELETE --form ids=10198702 -H "Authorization: $TOKEN" https://hub.peachworks.com/v1/shifts`
+
+
+
 
 # Paid In/Out Payments
 
