@@ -150,7 +150,7 @@ Categories are sales categories for items and can be hierarchical.
 * ID and NAME are required. 
 * Maps on **"name" + "parent_id"**
 
-```
+```xml
 // XML
 
 <category>
@@ -167,7 +167,7 @@ Items for sale.
 * ID and NAME are REQUIRED. 
 * Maps on **"name" + "category_id"**
 
-```
+```xml
 // XML
 <item>
     <id>1</id>
@@ -185,7 +185,7 @@ Revenue centers.
 * ID and NAME are REQUIRED. 
 * Maps on **"name"**.
 
-```
+```xml
 // XML
 <revenue_center>
     <id>8</id>
@@ -200,7 +200,7 @@ Order types.
 * ID and NAME are REQUIRED. 
 * Maps on **"name"**
 
-```
+```xml
 // XML
 <order_type>
     <id>8</id>
@@ -215,7 +215,7 @@ Voids and their reasons.
 * ID and NAME are REQUIRED. 
 * Maps on **"name"**.
 
-```
+```xml
 // XML
 <void>
     <id>11</id>
@@ -230,7 +230,7 @@ Discount types.
 * ID and NAME are REQUIRED. 
 * Maps on **"name"**.
 
-```
+```xml
 // XML
 <discount>
     <id>9</id>
@@ -245,7 +245,7 @@ House accounts (i.e. customer accounts for in-house tabs and similar):  These u
 * ID and NAME are REQUIRED. 
 * No auto-mapping:  all new house accounts are added to the master list.
 
-```
+```xml
 // XML
 <customer_account>
     <id>22</id>
@@ -260,7 +260,7 @@ Paid In/Out 
 * ID and NAME are REQUIRED. 
 * Maps on **"name"**.
 
-```
+```xml
 // XML
 <paid_inout>
     <id>103</id>
@@ -275,7 +275,7 @@ Payment types.
 * ID, NAME and PAYMENT_GROUP are REQUIRED. 
 * Maps on*"name" + "payment_group"*
 
-```
+```xml
 // XML
 <payment_type>
     <id>44</id>
@@ -292,7 +292,7 @@ Employees.
 * No auto-mapping: all new employees are added to the _master_ list.
 * For employee jobs, only the ID is required.
 
-```
+```xml
 // XML
 <employee>
     <id>20</id>
@@ -333,7 +333,7 @@ Jobs.
 * ID and NAME are REQUIRED. 
 * Maps on **"name"**.
 
-```
+```xml
 // XML
 <job>
    	<id>108</id>
@@ -348,7 +348,7 @@ You can either:
 
 * send a file attached to the request
 
-```
+```xml
 // Send as a file
 
 POST https://hub.peachworks.com/v1/config
@@ -460,7 +460,7 @@ A check can have multiple items applied to it.  Here are the fields for an item
 
 ## Sample XML
 
-```
+```xml
 <check>
     <check_id>3001-2011-02-03T09:19:45</check_id>
     <check_number>3001</check_number> 
@@ -604,7 +604,7 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 
 
 ## Sample XML
-```
+```xml
 <shift>
     <id>50751</id>
     <employee_id>2089</employee_id>
@@ -661,7 +661,7 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 | tip                   | decimal(2) | any additional amount paid as tip   |
 
 ## Sample XML
-```
+```xml
 <paid_inout_payment>
     <id>10</id>
     <amount>102.00</amount>
@@ -696,7 +696,7 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 
 ## Sample XML
 
-```
+```xml
 <deposit>
     <id>10</id>
     <amount>700.54</amount>
@@ -741,7 +741,7 @@ Returned data will include the followinge
    * time_in - scheduled beginning date+time of shift in UTC
    * time_out - scheduled ending date+time of shift in UTC
 
-```
+```json
 {
   "version": "1.0",
   "date_counts": {
@@ -775,7 +775,7 @@ Returned data will include the followinge
 ```
 
 
-```
+```json
 {
      "id": 123,
      "employee_id": "50",
