@@ -20,19 +20,24 @@ POS Hub creates a 2-way connection between one or more POS systems and Beyond On
    * [Payment Types](#payment-types)
    * [Employees](#employees)
    * [Jobs](#jobs)
-   * [Sample Request](#sample-request)
+   * [Adding Configuration Data](#adding-configuration-data)
+   * [Deleting Configuration Data](#deleting-configuration-data)
 * [Check Data](#check-data)
    * [Required Fields](#required-check-fields)
    * [Optional Fields](#optional-check-fields)
    * [Check Discounts](#check-discounts)
    * [Check Items](#check-items)
    * [Check Payments](#check-payments)
-   * [Sample XML](#sample-xml)
+   * [Adding Check Data](#adding-check-data)
+   * [Updating Check Data](#updating-check-data)
+   * [Deleting check Data](#deleting-check-data)
 * [Shift Data](#shift-data)
    * [Required Fields](#required-shift-fields)
    * [Optional Fields](#optional-shift-fields)
    * [Breaks](#breaks)
-   * [Sample XML](#sample-xml-1)
+   * [Adding Shift Data](#adding-shift-data)
+   * [Updating Shift Data](#updating-shift-data)
+   * [Deleting Shift Data](#deleting-shift-data)
 * [Paid In/Out Payments](#)
    * [Required Fields](#required-fields)
    * [Optional Fields](#optional-fields)
@@ -75,14 +80,14 @@ These are resources used to add/remove data from POS Hub
 | --------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | https://hub.peachworks.com/v1/config               | POST        | Used to add configuration data for all types of transactions.                                                                                                          |
 | https://hub.peachworks.com/v1/transactions         | POST        | Used to add all transaction data.                                                                                                                                      |
-| https://hub.peachworks.com/v1/pos\_token           | POST,DELETE | Used to add or remove a pos\_token                                                                                                                                     |
+| https://hub.peachworks.com/v1/pos_token           | POST,DELETE | Used to add or remove a pos\_token                                                                                                                                     |
 | https://hub.peachworks.com/v1/checks               | DELETE      | Used to remove check data.                                                                                                                                             |
-| https://hub.peachworks.com/v1/paid\_inouts         | DELETE      | Used to remove payin/payout data.                                                                                                                                      |
+| https://hub.peachworks.com/v1/paid_inouts         | DELETE      | Used to remove payin/payout data.                                                                                                                                      |
 | https://hub.peachworks.com/v1/deposits             | DELETE      | Used to remove bank deposit data.                                                                                                                                      |
 | https://hub.peachworks.com/v1/shifts                | DELETE      | Used to remove actual shift data.                                                                                                                                      |
 | https://hub.peachworks.com/v1/validate/config       | POST        | Post an XML file to validate it                                                                                                                                        |
 | https://hub.peachworks.com/v1/validate/transactions | POST        | Post an XML file to validate it                                                                                                                                        |
-| https://hub.peachworks.com/v1/scheduled\_shifts     | GET         | Used to retrieve scheduling data (only with labor app).                                                                                                                |
+| https://hub.peachworks.com/v1/scheduled_shifts     | GET         | Used to retrieve scheduling data (only with labor app).                                                                                                                |
 | https://hub.peachworks.com/v1/instructions     | GET         | Let the server indicate to the client which days need reloaded
 
 
@@ -135,8 +140,9 @@ Config data is consists of definitions for the following things
 * Jobs - list of jobs (ex. Server, Cashier, Bartender)
 
 
-> The "id" field for these can be a number or a string.\\ \\
+> The "id" field for these can be a number or a string.
 > A string ID is helpful in cases where a numeric ID is not available. For example, if a category named "Apps" did not have an ID, you can also use "Apps" as the ID.
+
 
 
 ## Master Lists & Mapping
@@ -377,11 +383,11 @@ Jobs.
 ```
 
 
-## Sample Request
+## Adding Configuration Data
 
 You can either:
 
-* send a file attached to the request
+* send an XML file attached to the request or send the XML inline
 
 ```xml
 // Send as a file
@@ -397,6 +403,9 @@ Authorization: "ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
 POST https://hub.peachworks.com/v1/config
 +body is XML data
 ```
+
+## Deleting Configuration Data
+Configuration data can be deleted from the Beyond One UI or via the Beyond One API https://github.com/getbeyond/app-developer-docs/wiki/App-API-Objects:-POS-Hub
 
 ----
 
@@ -493,9 +502,23 @@ A check can have multiple items applied to it.  Here are the fields for an item
 | applied\_at          | datetime   | date & time this discount was applied                        |
 
 
-## Sample XML
+## Adding Check Data
 
 ```xml
+// Send as a file
+
+POST https://hub.peachworks.com/v1/checks
+{
+    "pos_token":"ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
+}
++attachment - XML File (name of file's form field does not matter, just send on attachment)
+
+// Send inline XML
+Authorization: "ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
+POST https://hub.peachworks.com/v1/checks
++body is XML data
+
+// Check XML
 <check>
     <check_id>3001-2011-02-03T09:19:45</check_id>
     <check_number>3001</check_number> 
@@ -585,6 +608,116 @@ A check can have multiple items applied to it.  Here are the fields for an item
     </payment>
 </check>
 ```
+
+## Updating Check Data
+Send the updated check data exactly as you would if adding it for the first time. If the check ID already exists, the data will be updated.
+
+> If you're unsure of changes within individual checks, it is often simpler (and less error prone) to delete the checks for an hour or day and then add them again.
+
+## Deleting Check Data
+If Deleting the check data in order to reload it, see "Reloading Check Data" below to eliminate the need for a separate API request for deletion.
+
+### Deleting Checks By Day
+
+* start_date and end_date are required and it can be either an ISO date or an array of ISO dates
+* If any checks on any date provided can't be deleted for any reason this will return an error and nothing deleted
+   * 400 {"status":"error", "message":"Could not delete checks: <comma separated list of check ids>. Nothing was deleted."}
+* Returns 200 {"status":"success", "delete_count":integer} on success
+* When deciding the date to delete, use check.business_date
+	
+#### Example Request
+```
+DELETE /v1/checks
+Authorization: eukj3pos_token…
+{
+  "start_date":"2013-08-28",
+  "end_date":"2013-08-28",
+  "is_developer":true
+}
+  
+Returns
+200
+{
+  "status":"success",
+  "delete_count":153
+}
+```
+
+#### Example Curl Request
+`curl -X DELETE --form start_date=2013-08-28 --form end_date=2013-08-28 -H "Authorization: $TOKEN" https://hub.peachworks.com/v1/checks`
+
+### Deleting Checks By ID
+* "ids" is used and can be either one check id or an array of check ids
+* If any checks can't be deleted for any reason this will return an error and nothing deleted
+   * 400 {"status":"error", "message":"Could not delete checks: <comma separated list of check ids>. Nothing was deleted."}
+	
+#### Example Request
+```
+DELETE /v1/checks
+Authorization: eukj3pos_token…
+{
+  "ids":["304773739739","30477373974","3047737392"],
+//or
+ "ids":"304773739739",  <-- note this also should work for one check_id
+}
+  
+Returns
+200
+{
+  "status":"success",
+  "delete_count":3
+}
+```
+
+#### Example Curl Request
+`curl -X DELETE --form ids=10198702 -H "Authorization: $TOKEN" https://hub.peachworks.com/v1/checks`
+
+
+## Reloading Check Data
+In the case of just missing or bad data, the merchant can request specific days to be reloaded in Beyond One, these requested business days are available to integrators from our server using `/v1/instructions` .  If the array is empty, no missing days have been reported.
+
+* /v1/instructions (GET)
+   * authorize with the given pos_token(s), which the integration should have saved per source+location, just like normal uploads
+   * response body is similar to:
+      * `{ "reload": ["2016-03-01", "2016-03-02"], "is_active": true, "other": "things" }`
+      * The only keys that apply universally are "reload" and “is_active”, but ignore everything except reload for now.
+ 
+To reload the check data, a full day’s data should be generated and then uploaded to the `/v1/checks` end point with an additional query parameter indicating that this is a reload for a specific business date `?reload_date=2016-04-01`
+
+This way the server knows that the integrator is uploading a replacement day and will DELETE the existing transactions on that business date before adding the new transactions. This will also update the reload requests (if there is one) as completed after a successful load.
+
+for example:
+```
+POST /v1/checks?reload_date=2016-04-01
+[multipart-form with XML file] 
+```
+
+### When Data Isn't Available for a Day
+If the client no longer has any data for a requested business date, due to the data having been deleted or maybe the store was actually closed that day, then the integrator can send an unavailable status so the server won’t ask for this day again.
+
+* `/v1/client_status (POST)`
+   * authorize with the given pos_token(s), which the integration should have saved per source+location, just like normal uploads
+   * Parameters
+      * unavailable_days - is an array of dates for which the client cannot upload the data because it is missing. Time part will be ignored.
+
+for example:
+
+```
+POST /v1/client_status
+{“unavailable_days”: [“2018-12-25”, “2017-12-25”, “2018-01-01”] }
+```
+
+### Testing during development
+One thing you will need to do for testing is to set the reload_days on your own to trigger your systems’s reaction to the instructions.  This is the endpoint where that happens
+
+* `/v1/reload_days (POST)`
+   * The endpoint will not let there be more than 31 entries per source/location at a time, to prevent a large burden on the system from reloading.
+   * an example of the request body:
+      * {"account_id":1000,"access_token":"Ac~A3kW", location_ids: [1,2,3], source_id: 5, start_date: '2016-01-01', end_date: '2016-02-01'}
+
+With the example values replaced by the values for your account, locations, source and dates.
+
+Note: this uses an access token which you can get in a browser after logged in to https://my.getbeyond.com and looking in the web developer console network debugger.  It does not use a pos_token because it allows more than one location id to be passed in.
 
 
 # Shift Data
