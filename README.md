@@ -4,16 +4,51 @@ The POS Hub API allows for the simple integration of a POS system with the Beyon
 
 POS Hub creates a 2-way connection between one or more POS systems and Beyond One. The app gives users an easy way to standardize menu item names and connect shift or sales data to use with other solutions. 
 
-The schemas against which the XML is validated are available in two formats: rng and xsd.
+Table of Contents
+* [Setting Up a Test Account](#setting-up-a-test-account)
+* [Connecting](#connecting)
+* [Schemas and Example Data](#viewing-schemas-and-example-data)
+* [Configuration Data](#configuration-data)
+   * [Categories](#categories)
+   * [Items](#items)
+   * [Revenue Centers](#revenue-centers)
+   * [Order Types](#order-types)
+   * [Voids](#voids)
+   * [Discounts](#discounts)
+   * [Customer (House) Accounts](#customer-house-accounts)
+   * [Paid Ins/Outs](#paid-insouts)
+   * [Payment Types](#payment-types)
+   * [Employees](#employees)
+   * [Jobs](#jobs)
+   * [Sample Request](#sample-request)
+* [Check Data](#check-data)
+   * [Required Fields](#required-check-fields)
+   * [Optional Fields](#optional-check-fields)
+   * [Check Discounts](#check-discounts)
+   * [Check Items](#check-items)
+   * [Check Payments](#check-payments)
+   * [Sample XML](#sample-xml)
+* [Shift Data](#shift-data)
+   * [Required Fields](#required-shift-fields)
+   * [Optional Fields](#optional-shift-fields)
+   * [Breaks](#breaks)
+   * [Sample XML](#sample-xml-1)
+* [Paid In/Out Payments](#)
+   * [Required Fields](#required-fields)
+   * [Optional Fields](#optional-fields)
+   * [Sample XML](#sample-xml-2)
+* [Deposits](#deposits)
+   * [Required Fields](#required-fields-1)
+   * [Optional Fields](#optional-fields-1)
+   * [Sample XML](#sample-xml-3)
+* [Scheduled Shift Exports](#scheduled-shift-exports)
+   * [Request](#request)
+   * [Response](#response)
 
-
-We also have sample files for config transactions as reference.  Sometimes it's just easier to see "real" examples than read a definition.
-
-All these files are also included at the bottom of this document in their full form.
 
 ----
 
-# Setting Up a POS Hub Test Account
+# Setting Up a Test Account
 
 In order to send your POS data to Peach, you'll need an account with a subscription to the POS Hub App. 
 
