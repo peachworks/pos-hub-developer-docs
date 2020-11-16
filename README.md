@@ -4,10 +4,10 @@ The POS Hub API allows for the simple integration of a POS system with the Beyon
 
 POS Hub creates a 2-way connection between one or more POS systems and Beyond One. The app gives users an easy way to standardize menu item names and connect shift or sales data to use with other solutions. 
 
-The schemas against which the XML is validated are available in two formats for config, [rng|^config_1.0.grammar.rng] and [xsd|^config_1.0.grammar.xsd], and transactions, [rng|^transactions_1.0.grammar.rng] and [xsd|^transactions_1.0.grammar.xsd].
+The schemas against which the XML is validated are available in two formats: rng and xsd.
 
 
-We also have sample files for [config|^sample_config.xml] and [transactions|^sample_transactions.xml] as reference.  Sometimes it's just easier to see "real" examples than read a definition.
+We also have sample files for config transactions as reference.  Sometimes it's just easier to see "real" examples than read a definition.
 
 All these files are also included at the bottom of this document in their full form.
 
@@ -558,17 +558,49 @@ A check can have multiple items applied to it.  Here are the fields for an item
 
 The required primary data fields for every shift are:
 
+| Field                 | Type                                                        | Description                                                                                                                                             |
+| --------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id                    | string                                                      | unique ID for a shift in a location. If the POS System does not provide a unique ID, you can try combining the give shift ID with the shift start time. |
+| employee\_id          | string                                                      | employee ID for the shift                                                                                                                               |
+| job\_id               | string                                                      | job ID for the shift                                                                                                                                    |
+| business\_date        | date                                                        | date used for reporting the labor                                                                                                                       |
+| business\_start\_time | time                                                        | time used for reporting the labor                                                                                                                       |
+| started\_at           | datetime                                                    | date & time the shift was started                                                                                                                       |
+| total\_minutes        | integer - note: future updates may change this to a decimal | total number of minutes for the shift (including overtime)                                                                                              |
+| total\_pay            | decimal(2)                                                  | total cost for the shift (including overtime)                                                                                                           |
+| shift\_updated\_at    | datetime                                                    | last time the shift was updated                                                                                                                         |
 
 
 ## Optional Shift Fields
 
 The following shift fields are optional.
 
+| Field                  | Type       | Description                          |
+| ---------------------- | ---------- | ------------------------------------ |
+| business\_end\_time    | time       | business time the shift ends         |
+| ended\_at              | datetime   | date & time the shift ended          |
+| pay\_rate              | decimal(2) | pay rate                             |
+| overtime\_minutes      | integer    | total number of overtime minutes     |
+| overtime\_pay\_rate    | decimal(2) | pay rate for overtime                |
+| overtime\_pay          | decimal(2) | total cost for overtime              |
+| cc\_tips               | decimal(2) | total credit card tips               |
+| cash\_tips             | decimal(2) | total cash tips                      |
+| paid\_break\_minutes   | integer    | total number of paid break minutes   |
+| paid\_break\_pay       | decimal(2) | total cost for paid breaks           |
+| unpaid\_break\_minutes | integer    | total number of unpaid break minutes |
+
 
 
 ## Breaks
 A shift can have multiple breaks within it.  Here are the fields for a break:
 
+| Field          | Type       | Description                                       |
+| -------------- | ---------- | ------------------------------------------------- |
+| started\_at    | datetime   | date & time for the start of the break (REQUIRED) |
+| ended\_at      | datetime   | date & time for the end of the break (REQUIRED)   |
+| break\_minutes | integer    | total number of break minutes (REQUIRED)          |
+| is\_paid       | boolean    | true if paid break, false if unpaid break         |
+| break\_pay     | decimal(2) | total cost for this break ($0 if unpaid break)    |
 
 
 ## Sample XML
@@ -610,7 +642,23 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 
 ## Required Fields
 
+| Field              | Type       | Description                                             |
+| ------------------ | ---------- | ------------------------------------------------------- |
+| id                 | text       | unique identifier of the paid in/out payment            |
+| amount             | decimal(2) | Total amount of payment made (does not include any tip) |
+| paid\_at           | datetime   | time the paid in/out was entered                        |
+| payment\_type\_id  | object     | reference to payments table                             |
+| business\_date     | date       | reporting date for paid in/out                          |
+| last\_modified\_at | datetime   | time of last payment edit                       |
+
 ## Optional Fields
+
+| Field                 | Type       | Description                         |
+| --------------------- | ---------- | ----------------------------------- |
+| paid\_inout\_id       | object     | reason for paid in/out              |
+| employee\_Id          | object     | employee entering the paid in/out   |
+| customer\_account\_id | object     | Customer Account paid in/out is for |
+| tip                   | decimal(2) | any additional amount paid as tip   |
 
 ## Sample XML
 ```
@@ -631,6 +679,14 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 # Deposits
 
 ## Required Fields
+
+| Field              | Type       | Description                                            |
+| ------------------ | ---------- | ------------------------------------------------------ |
+| id                 | text       | unique identifier of the deposit                       |
+| amount             | decimal(2) | total of the deposit (negative signifies a withdrawal) |
+| deposited\_at      | datetime   | time the deposit was entered                           |
+| business\_date     | date       | reporting date of deposit                              |
+| last\_modified\_at | datetime   | time deposit was edited                                |
 
 ## Optional Fields
 
