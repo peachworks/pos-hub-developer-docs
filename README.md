@@ -4,7 +4,7 @@ The POS Hub API allows for the simple integration of a POS system with the Beyon
 
 POS Hub creates a 2-way connection between one or more POS systems and Beyond One. The app gives users an easy way to standardize menu item names and connect shift or sales data to use with other solutions. 
 
-Table of Contents
+## Table of Contents
 * [Setting Up a Test Account](#setting-up-a-test-account)
 * [Connecting](#connecting)
 * [Schemas and Example Data](#viewing-schemas-and-example-data)
