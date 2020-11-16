@@ -19,7 +19,7 @@ In order to send your POS data to Peach, you'll need an account with a subscript
 
 Once you have account credentials,
 
-* Go to [https://my.getbeyond.com|https://my.getbeyond.com] and enter your username and password
+* Go to https://my.getbeyond.com and enter your username and password
 * click on the POS Hub application icon
 ** Enter the System Setup wizard
 ** There is an option in the first step of the wizard to choose a POS system.  Select "Direct".
@@ -38,17 +38,17 @@ These are resources used to add/remove data from POS Hub
 
 | URL                                                                                           | Methods     | Description                                                                                                                                                            |
 | --------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [https://hub.peachworks.com/v1/config](https://hub.whentomanage.com/v1/config)                | POST        | Used to add configuration data for all types of transactions.                                                                                                          |
-| [https://hub.peachworks.com/v1/transactions](https://hub.whentomanage.com/v1/transactions)    | POST        | Used to add all transaction data.                                                                                                                                      |
-| [https://hub.peachworks.com/v1/pos\_token](https://hub.peachworks.com/v1/pos_token)           | POST,DELETE | Used to add or remove a pos\_token                                                                                                                                     |
-| [https://hub.peachworks.com/v1/checks](https://hub.whentomanage.com/v1/checks)                | DELETE      | Used to remove check data.                                                                                                                                             |
-| [https://hub.peachworks.com/v1/paid\_inouts](https://hub.whentomanage.com/v1/paid_inouts)     | DELETE      | Used to remove payin/payout data.                                                                                                                                      |
-| [https://hub.peachworks.com/v1/deposits](https://hub.whentomanage.com/v1/deposits)            | DELETE      | Used to remove bank deposit data.                                                                                                                                      |
-| [https://hub.peachworks.com/v1/shifts](https://hub.whentomanage.com/v1/shifts)                | DELETE      | Used to remove actual shift data.                                                                                                                                      |
-| [https://hub.peachworks.com/v1/validate/config](https://hub.whentomanage.com/v1/shifts)       | POST        | Post an XML file to validate it                                                                                                                                        |
-| [https://hub.peachworks.com/v1/validate/transactions](https://hub.whentomanage.com/v1/shifts) | POST        | Post an XML file to validate it                                                                                                                                        |
-| [https://hub.peachworks.com/v1/scheduled\_shifts](https://hub.whentomanage.com/v1/shifts)     | GET         | Used to retrieve scheduling data (only with labor app).                                                                                                                |
-| [https://hub.peachworks.com/v1/instructions](https://hub.peachworks.com/v1/instructions)      | GET         | Let the server indicate to the client which days need reloaded
+| https://hub.peachworks.com/v1/config               | POST        | Used to add configuration data for all types of transactions.                                                                                                          |
+| https://hub.peachworks.com/v1/transactions         | POST        | Used to add all transaction data.                                                                                                                                      |
+| https://hub.peachworks.com/v1/pos\_token           | POST,DELETE | Used to add or remove a pos\_token                                                                                                                                     |
+| https://hub.peachworks.com/v1/checks               | DELETE      | Used to remove check data.                                                                                                                                             |
+| https://hub.peachworks.com/v1/paid\_inouts         | DELETE      | Used to remove payin/payout data.                                                                                                                                      |
+| https://hub.peachworks.com/v1/deposits             | DELETE      | Used to remove bank deposit data.                                                                                                                                      |
+| https://hub.peachworks.com/v1/shifts                | DELETE      | Used to remove actual shift data.                                                                                                                                      |
+| https://hub.peachworks.com/v1/validate/config       | POST        | Post an XML file to validate it                                                                                                                                        |
+| https://hub.peachworks.com/v1/validate/transactions | POST        | Post an XML file to validate it                                                                                                                                        |
+| https://hub.peachworks.com/v1/scheduled\_shifts     | GET         | Used to retrieve scheduling data (only with labor app).                                                                                                                |
+| https://hub.peachworks.com/v1/instructions     | GET         | Let the server indicate to the client which days need reloaded
 
 
 ## Authentication/authorization
@@ -58,7 +58,7 @@ The type of authentication is using a _pos_token_, as it is the simplest method 
 The method for POS Token authorization is to include an "Authorization:" header in the HTTP headers.  The content of this header is the pos_token:
 
 ```
-     curl -X DELETE "[https://hub.peachworks.com/v1/things|https://api.peachworks.com/v1/app_objects/272]" -H "Authorization: ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn…"
+     curl -X DELETE "https://hub.peachworks.com/v1/things" -H "Authorization: ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn…"
 ```
 
 ----
@@ -228,7 +228,7 @@ Voids and their reasons.
 Discount types.
 
 * ID and NAME are REQUIRED. 
-* Maps on *"name"*.
+* Maps on **"name"**.
 
 ```
 // XML
@@ -238,62 +238,53 @@ Discount types.
 </discount>
 ```
 
-## Customer (House) Accounts
+### Customer (House) Accounts
 
 House accounts (i.e. customer accounts for in-house tabs and similar):  These use "customer_accounts" as their API object, but are referred to on the front-end as "House Accounts", for consistency reasons.
 
 * ID and NAME are REQUIRED. 
 * No auto-mapping:  all new house accounts are added to the master list.
 
-\\
-
-
-{code}
+```
 // XML
 <customer_account>
     <id>22</id>
     <name>Antonio Smith</name>
 </customer_account>
-{code}
+```
 
-h2. Paid In/Outs
+### Paid In/Outs
 
 Paid In/Out 
 
 * ID and NAME are REQUIRED. 
-* Maps on *"name"*.
+* Maps on **"name"**.
 
-\\
-
-
-{code}
+```
 // XML
 <paid_inout>
     <id>103</id>
     <name>Delivery Fee</name>
 </paid_inout>
-{code}
+```
 
-h2. Payment Types
+### Payment Types
 
 Payment types.
 
 * ID, NAME and PAYMENT_GROUP are REQUIRED. 
 * Maps on*"name" + "payment_group"*
 
-\\
-
-
-{code}
+```
 // XML
 <payment_type>
     <id>44</id>
     <name>Master Card</name>
     <payment_group>CREDIT_CARD</payment_group>
 </payment_type>
-{code}
+```
 
-h2. Employees
+### Employees
 
 Employees.
 
@@ -301,10 +292,7 @@ Employees.
 * No auto-mapping: all new employees are added to the _master_ list.
 * For employee jobs, only the ID is required.
 
-\\
-
-
-{code}
+```
 // XML
 <employee>
     <id>20</id>
@@ -336,43 +324,31 @@ Employees.
         </job>
     </jobs>
 </employee>
-{code}
+```
 
-\\
-
-
-h2. Jobs
+### Jobs
 
 Jobs.
 
 * ID and NAME are REQUIRED. 
-* Maps on *"name"*.
+* Maps on **"name"**.
 
-\\
-
-
-{code}
+```
 // XML
 <job>
    	<id>108</id>
     <name>Busser</name>
 </job>
-
-{code}
-
-\\
+```
 
 
-h2. Sample Request
+## Sample Request
 
 You can either:
 
 * send a file attached to the request
 
-\\
-
-
-{code}
+```
 // Send as a file
 
 POST https://hub.peachworks.com/v1/config
@@ -385,38 +361,106 @@ POST https://hub.peachworks.com/v1/config
 Authorization: "ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
 POST https://hub.peachworks.com/v1/config
 +body is XML data
-{code}
-
-\\
-
+```
 
 ----
 
-\\
+# Check Data
 
-
-h1. Check Data
-
-h2. Required Check Fields
+## Required Check Fields
 
 A "check" refers to a single customer bill of sale (not to a personal check used for payment).
 
-The required primary data fields for every check are...Optional Check Fields
+The required primary data fields for every check are...
+| Field              | Type       | Description                                                                                                                                                                                                                                                                                                               |
+| ------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| check\_id          | string     | unique ID for a check for a given POS in a location. If the POS System does not provide a unique ID, you can try combining the check number with the check open datetime.                                                                                                                                                 |
+| check\_number      | string     | the check number, if no check number exists, you can use the check\_id. This does not need to be unique.                                                                                                                                                                                                                  |
+| business\_date     | date       | date used for reporting the sales                                                                                                                                                                                                                                                                                         |
+| business\_time     | time       | time used for reporting the sales. This is a local time (not UTC) and is used so that we can easily report on sales from 3-4pm at multiple locations across different time zones. In our own integrations, we would need to calculate this field if we are provided UTC time data by looking up the locations time zone. |
+| opened\_at         | datetime   | date & time the check was opened                                                                                                                                                                                                                                                                                          |
+| last\_modified\_at | datetime   | last time the check was updated                                                                                                                                                                                                                                                                                           |
+| total              | decimal(2) | the check total                                                                                                                                                                                                                                                                                                           |
+
+
+## Optional Check Fields
 
 The following check fields are optional.
 
-h2. A check can have multiple discounts applied to it.  Here are the fields for a discount:Check Discounts
+| Field               | Type       | Description                                                                                 |
+| ------------------- | ---------- | ------------------------------------------------------------------------------------------- |
+| employee\_id        | string     | employee assigned to the check                                                              |
+| closed\_at          | datetime   | date & time the check was closed, if this is NULL, we will report the check as being "open" |
+| reopened\_at        | datetime   | date & time the check was reopened                                                          |
+| reopened\_by\_id    | string     | employee id for the person that reopened the check                                          |
+| order\_number       | string     | order number                                                                                |
+| order\_type\_id     | string     | order type ID                                                                               |
+| revenue\_center\_id | string     | revenue center ID                                                                           |
+| guest\_count        | integer    | total number of guests                                                                      |
+| discount\_total     | decimal(2) | total amount of discounts                                                                   |
+| void\_total         | decimal(2) | total amount of voids                                                                       |
+| inclusive\_tax      | decimal(2) | total amount of inclusive tax                                                               |
+| exclusive\_tax      | decimal(2) | total amount of exlusive tax                                                                |
+| table\_number       | string     | table number                                                                                |
+| auto\_grat          | decimal(2) | total amount of auto gratuity applied to the check                                          |
+| service\_charge     | decimal(2) | total amount of service charges applied to the check                                        |
 
-h2. \\
-A check can have multiple items applied to it.  Here are the fields for an item:Check Items
-
-h2. Check Payments
-
-\\
-\\
 
 
-{code}
+## Check Discounts
+A check can have multiple discounts applied to it.  Here are the fields for a discount
+
+| Field            | Type       | Description                                                  |
+| ---------------- | ---------- | ------------------------------------------------------------ |
+| discount\_id     | string     | discount ID (REQUIRED)                                       |
+| quantity         | integer    | total number of items affected by this discount (REQUIRED)   |
+| amount           | decimal(2) | total amount of discounts for this discount (REQUIRED)       |
+| category\_id     | string     | optional category id that this discount should be applied to |
+| approver\_id     | string     | employee ID for the manager that approved this discount      |
+| reopened\_at     | datetime   | date & time the check/discount was reopened                  |
+| reopened\_by\_id | string     | employee id for the person that reopened the check/discount  |
+| applied\_at      | datetime   | date & time this discount was applied                        |
+
+
+## Check Items
+A check can have multiple items applied to it.  Here are the fields for an item
+
+| Field          | Type        | Description                                                                                                       |
+| -------------- | ----------- | ----------------------------------------------------------------------------------------------------------------- |
+| item\_id       | string      | item ID (REQUIRED)                                                                                                |
+| quantity       | integer     | total number of items affected by this item (REQUIRED)                                                            |
+| amount         | decimal(2)  | total sales amount for this item (REQUIRED) - this amount should INCLUDE discount/comp BUT DOES NOT INCLUDE taxes |
+| category\_id   | string      | optional category id that this item should be applied to                                                          |
+| inclusive\_tax | decimal(2)  | optional inclusive tax amount                                                                                     |
+| exclusive\_tax | decimal(2)  | optional exclusive tax amount                                                                                     |
+| discount       | xml element | optional , see check discounts (can only have one)                                                                |
+| void           | xml element | optional , see check voids (can only have one)                                                                    |
+| modifier       | xml element | optional , this, a check item modifier (can have many) things like bacon, cheese etc..|
+
+
+## Check Payments
+
+| Field                | Type       | Description                                                  |
+| -------------------- | ---------- | ------------------------------------------------------------ |
+| payment\_type\_id    | string     | ID for the payment type (REQUIRED)                           |
+| total                | decimal(2) | total amount of the payment (REQUIRED)                       |
+| received             | integer    | total number of items affected by this discount (REQUIRED)   |
+| change               | decimal(2) | total amount of discounts for this discount (REQUIRED)       |
+| tip                  | string     | optional category id that this discount should be applied to |
+| tip\_processing\_fee | string     | employee ID for the manager that approved this discount      |
+| auto\_grat           | datetime   | date & time this discount was applied                        |
+| service\_charges     | decimal    | any service charges applied to the payment                   |
+| memo                 | text       | notes about the payment                                      |
+| last\_4\_digits      | text       | last four digits of CC number                                |
+| customer\_name       | text       | first and last name of customer                              |
+| reopened\_at         | datetime   | date & time the check/discount was reopened                  |
+| reopened\_by\_id     | string     | employee id for the person that reopened the check/discount  |
+| applied\_at          | datetime   | date & time this discount was applied                        |
+
+
+## Sample XML
+
+```
 <check>
     <check_id>3001-2011-02-03T09:19:45</check_id>
     <check_number>3001</check_number> 
@@ -505,29 +549,30 @@ h2. Check Payments
         <customer_name></customer_name>    
     </payment>
 </check>
-{code}
-
-\\
+```
 
 
-h1. Shift Data
+# Shift Data
 
-h2. Required Shift Fields
+## Required Shift Fields
 
 The required primary data fields for every shift are:
 
-h2. Optional Shift Fields
+
+
+## Optional Shift Fields
 
 The following shift fields are optional.
 
-h2. \\
-A shift can have multiple breaks within it.  Here are the fields for a break:Breaks
-
-\\
-\\
 
 
-{code}
+## Breaks
+A shift can have multiple breaks within it.  Here are the fields for a break:
+
+
+
+## Sample XML
+```
 <shift>
     <id>50751</id>
     <employee_id>2089</employee_id>
@@ -557,25 +602,18 @@ A shift can have multiple breaks within it.  Here are the fields for a break:Br
         <break_pay></break_pay>
     </break>
 </shift>
-{code}
+```
 
-h1. Paid In/Out Payments
+# Paid In/Out Payments
 
 * negative amounts indicate paid out
 
-h2. Required Fields
+## Required Fields
 
-h2. \\
-\\
-Optional Fields
+## Optional Fields
 
-\\
-
-
-\\
-
-
-{code:language=xml|title=Paid In/Outs}
+## Sample XML
+```
 <paid_inout_payment>
     <id>10</id>
     <amount>102.00</amount>
@@ -588,21 +626,17 @@ Optional Fields
     <customer_account_id>6</customer_account_id>
     <tip>1.00</tip>
 </paid_inout_payment>
-{code}
+```
 
-h1. Deposits
+# Deposits
 
-h2. Required Fields
+## Required Fields
 
-h2. Optional Fields
+## Optional Fields
 
-\\
+## Sample XML
 
-
-\\
-
-
-{code:language=xml|title=Deposits}
+```
 <deposit>
     <id>10</id>
     <amount>700.54</amount>
@@ -611,11 +645,11 @@ h2. Optional Fields
     <business_date>2015-01-05</business_date>
     <employee_id>43</employee_id>
 </deposit>
-{code}
+```
 
-h1. Scheduled Shift Exports
+# Scheduled Shift Exports
 
-h2. Request
+## Request
 
 * Accessible only with pos_token authorization.  The token should be put in the "Authorization" header.
 * If the account is not subscribed to Schedule, the only result returned will be a 404 status.
@@ -628,21 +662,18 @@ Additional parameters maybe be supplied if a specific date range is needed.
 * All timestamps may include a timezone, e.g. "2017-03-01T07:30:00-04:00" for specificity.  If no timezone is present on the timestamp then "local store time" is assumed.
 * "start" and "end" may be bare dates "2017-03-20", which will return the whole business day's shifts.
 
-h2. \\
-Returned data will include the followingResponse
+## Response
+Returned data will include the followinge
 
 * a version
 * an array of count of shifts per date returned (based on start date of shift)
 * an array of shifts which each include
-** employee_id - ID is from POS
-** job_id - ID is from POS
-** time_in - scheduled beginning date+time of shift in UTC
-** time_out - scheduled ending date+time of shift in UTC
+   * employee_id - ID is from POS
+   * job_id - ID is from POS
+   * time_in - scheduled beginning date+time of shift in UTC
+   * time_out - scheduled ending date+time of shift in UTC
 
-\\
-
-
-{code:language=js|title=Exported Shifts JSON}
+```
 {
   "version": "1.0",
   "date_counts": {
@@ -673,12 +704,10 @@ Returned data will include the followingResponse
     }
   ]
 }
-{code}
-
-\\
+```
 
 
-{code:language=js|title=using include_names\=true}
+```
 {
      "id": 123,
      "employee_id": "50",
@@ -688,6 +717,4 @@ Returned data will include the followingResponse
      "time_in": "2017-02-17T14:15:00Z",
      "time_out": "2017-02-17T22:15:00Z"
     }
-{code}
-
-\\
+```
