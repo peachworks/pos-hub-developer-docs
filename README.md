@@ -508,7 +508,7 @@ A check can have multiple items applied to it.  Here are the fields for an item
 ```xml
 // Send as a file
 
-POST https://hub.peachworks.com/v1/checks
+POST https://hub.peachworks.com/v1/transactions
 {
     "pos_token":"ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
 }
@@ -516,7 +516,7 @@ POST https://hub.peachworks.com/v1/checks
 
 // Send inline XML
 Authorization: "ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
-POST https://hub.peachworks.com/v1/checks
+POST https://hub.peachworks.com/v1/transactions
 +body is XML data
 
 // Check XML
@@ -689,7 +689,7 @@ This way the server knows that the integrator is uploading a replacement day and
 
 for example:
 ```
-POST /v1/checks?reload_date=2016-04-01
+POST /v1/transactions?reload_date=2016-04-01
 [multipart-form with XML file] 
 ```
 
@@ -774,6 +774,19 @@ A shift can have multiple breaks within it.  Here are the fields for a break:
 
 ## Adding Shift Data
 ```xml
+// Send as a file
+POST https://hub.peachworks.com/v1/transactions
+{
+    "pos_token":"ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
+}
++attachment - XML File (name of file's form field does not matter, just send on attachment)
+
+// Send inline XML
+Authorization: "ELO5afhGRMfRq05Zenk4ZlwFdDJttHuZ5dT12Zd6ASn"
+POST https://hub.peachworks.com/v1/transactions
++body is XML data
+
+// Shift XML
 <shift>
     <id>50751</id>
     <employee_id>2089</employee_id>
