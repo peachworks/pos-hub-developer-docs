@@ -757,6 +757,8 @@ The following shift fields are optional.
 | paid\_break\_minutes   | integer    | total number of paid break minutes   |
 | paid\_break\_pay       | decimal(2) | total cost for paid breaks           |
 | unpaid\_break\_minutes | integer    | total number of unpaid break minutes |
+| start\_bank            | decimal(2) | bank cash total at start of shift    |
+| end\_bank              | decimal(2) | bank cash total at end of shift      |
 
 
 
@@ -805,6 +807,8 @@ POST https://hub.peachworks.com/v1/transactions
     <overtime_pay>0</overtime_pay>
     <cc_tips></cc_tips>
     <cash_tips>0</cash_tips>
+    <start_bank>50.00</start_bank>
+    <end_bank>25.00</end_bank>
     <paid_break_minutes></paid_break_minutes>
     <paid_break_pay></paid_break_pay>
     <unpaid_break_minutes></unpaid_break_minutes>

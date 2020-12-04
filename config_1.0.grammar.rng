@@ -25,6 +25,9 @@
           <ref name="revenue_center"/>
         </zeroOrMore>
         <zeroOrMore>
+          <ref name="order_type"/>
+        </zeroOrMore>
+        <zeroOrMore>
           <ref name="discount"/>
         </zeroOrMore>
         <zeroOrMore>
@@ -53,16 +56,12 @@
         <ref name="element_id"/>
         <element name="employee_number">
           <a:documentation>Employee number from POS system</a:documentation>
-          <data type="string">
-            <param name="pattern">.+</param>
-          </data>
+          <ref name="non_empty_string"/>
         </element>
         <element name="first_name">
           <a:documentation>First name of the employee</a:documentation>
-          <data type="string">
-            <param name="pattern">.+</param>
-          </data>
-        </element>        
+          <ref name="non_empty_string"/>
+        </element>
         <optional>
           <element name="last_name">
             <a:documentation>Last name of the employee</a:documentation>
@@ -90,6 +89,12 @@
         <optional>
           <element name="hire_date">
             <a:documentation>Hire date of the employee</a:documentation>
+            <data type="string"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="birth_date">
+            <a:documentation>Birth date of the employee</a:documentation>
             <data type="string"/>
           </element>
         </optional>
@@ -203,6 +208,7 @@
             <value>VOUCHER</value>
             <value>MISC</value>
             <value>MOBILE</value>
+            <value>DEBIT</value>
           </choice>
         </element>
       </interleave>
@@ -212,6 +218,16 @@
   <define name="revenue_center">
     <element name="revenue_center">
       <a:documentation>Each revenue center has a POS assigned, unique ID </a:documentation>
+      <interleave>
+        <ref name="element_id"/>
+        <ref name="element_name"/>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="order_type">
+    <element name="order_type">
+      <a:documentation>Each order type has a POS assigned, unique ID </a:documentation>
       <interleave>
         <ref name="element_id"/>
         <ref name="element_name"/>
@@ -321,17 +337,14 @@
   <define name="element_id">
     <element name="id">
       <a:documentation>POS assigned, unique ID</a:documentation>
-      <data type="string">
-        <param name="pattern">.+</param>
-      </data>
+      <ref name="non_empty_string"/>
     </element>
   </define>
 
   <define name="element_name">
     <element name="name">
       <a:documentation>Text description of item</a:documentation>
-      <data type="string">
-      </data>
+      <ref name="non_empty_string"/>
     </element>
   </define>
 
@@ -341,7 +354,11 @@
       <param name="minInclusive">0</param>
     </data>
   </define>
+
+  <define name="non_empty_string">
+    <data type="string">
+      <param name="pattern">(.|\n|\r)*\S(.|\n|\r)*</param>
+      <param name="minLength">1</param>
+    </data>
+  </define>
 </grammar>
- 
-
-

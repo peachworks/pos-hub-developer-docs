@@ -32,9 +32,7 @@
       <interleave>
         <element name="check_number">
           <a:documentation>Unique check number</a:documentation>
-          <data type="string">
-            <param name="pattern">(.|\n|\r)*\S(.|\n|\r)*</param>
-          </data>
+          <ref name="non_empty_string"/>
         </element>
         <optional>
           <element name="order_number">
@@ -44,17 +42,15 @@
         </optional>
         <element name="check_id">
           <a:documentation>Unique ID</a:documentation>
-          <data type="string">
-            <param name="pattern">(.|\n|\r)*\S(.|\n|\r)*</param>
-          </data>
+          <ref name="non_empty_string"/>
         </element>
         <element name="last_modified_at">
           <a:documentation>time and date the check was last updated</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <element name="business_date">
           <a:documentation>Business date for the check</a:documentation>
-          <data type="date"/>
+          <ref name="date_minInclusive"/>
         </element>
         <element name="business_time">
           <a:documentation>Business time for the check</a:documentation>
@@ -68,7 +64,7 @@
         </optional>
         <element name="opened_at">
           <a:documentation>Date and time the check was opened</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <element name="total">
           <a:documentation>Check total (amount due)</a:documentation>
@@ -77,11 +73,16 @@
         <optional>
           <element name="closed_at">
             <a:documentation>Date and time the check was closed</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
           <element name="revenue_center_id">
+            <data type="string"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="order_type_id">
             <data type="string"/>
           </element>
         </optional>
@@ -112,7 +113,7 @@
         <optional>
           <element name="reopened_at">
             <a:documentation>Last date and time the check was reopened</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
@@ -188,7 +189,7 @@
     <interleave>
       <element name="item_id">
         <a:documentation>POS Item ID</a:documentation>
-        <data type="string"/>
+        <ref name="non_empty_string"/>
       </element>
       <element name="quantity">
         <a:documentation>The quantity of the item sold</a:documentation>
@@ -261,13 +262,13 @@
         <optional>
           <element name="applied_at">
             <a:documentation>Time and date the discount was applied</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
           <element name="reopened_at">
             <a:documentation>Last date and time the check/discount was reopened</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
@@ -284,8 +285,20 @@
       <interleave>
         <element name="void_id">
           <a:documentation>POS Void ID</a:documentation>
-          <data type="string"/>
+          <ref name="non_empty_string"/>
         </element>
+        <optional>
+          <element name="quantity">
+            <a:documentation>The quantity of the item that's voided. Entry used if item's quantity is different.</a:documentation>
+            <ref name="two_digit_decimal"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="amount">
+            <a:documentation>Total amount voided for this item. Entry used if item's amount is different.</a:documentation>
+            <ref name="two_digit_decimal"/>
+          </element>
+        </optional>
         <optional>
           <element name="approver_id">
             <a:documentation>Employee_id for the person that applied the void</a:documentation>
@@ -295,13 +308,13 @@
         <optional>
           <element name="applied_at">
             <a:documentation>Time and date the void was applied</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
           <element name="reopened_at">
             <a:documentation>Last date and time the check/void was reopened</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
@@ -322,7 +335,7 @@
         </element>
         <element name="payment_type_id">
           <a:documentation>The corresponding Payment ID</a:documentation>
-          <data type="string"/>
+          <ref name="non_empty_string"/>
         </element>
         <optional>
           <element name="received">
@@ -363,13 +376,13 @@
         <optional>
           <element name="applied_at">
             <a:documentation>Time and date the payment was applied</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
           <element name="reopened_at">
             <a:documentation>Last date and time the check/payment was reopened</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <optional>
@@ -396,6 +409,12 @@
             <data type="string"/>
           </element>
         </optional>
+        <optional>
+          <element name="customer_account_id">
+            <a:documentation>Customer account for which this payment is for</a:documentation>
+            <data type="string"/>
+          </element>
+        </optional>
       </interleave>
     </element>
   </define>
@@ -413,7 +432,7 @@
         </element>
         <element name="business_date">
           <a:documentation>Business date for reporting shift</a:documentation>
-          <data type="date"/>
+          <ref name="date_minInclusive"/>
         </element>
         <element name="business_start_time">
           <a:documentation>Business start time for the shift</a:documentation>
@@ -427,25 +446,25 @@
         </optional>
         <element name="shift_updated_at">
           <a:documentation>time and date the shift was last updated</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <element name="started_at">
           <a:documentation>time and date the shift started</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <optional>
           <element name="ended_at">
             <a:documentation>time and date the shift ended</a:documentation>
-            <data type="dateTime"/>
+            <ref name="dateTime_minInclusive"/>
           </element>
         </optional>
         <element name="total_minutes">
           <ref name="two_digit_decimal"/>
         </element>
         <optional>
-        <element name="pay_rate">
-          <ref name="two_digit_decimal"/>
-        </element>
+          <element name="pay_rate">
+            <ref name="two_digit_decimal"/>
+          </element>
         </optional>
         <element name="total_pay">
           <ref name="two_digit_decimal"/>
@@ -476,6 +495,11 @@
           </element>
         </optional>
         <optional>
+          <element name="service_charges">
+            <ref name="two_digit_decimal"/>
+          </element>
+        </optional>
+        <optional>
           <element name="paid_break_minutes">
             <ref name="two_digit_decimal"/>
           </element>
@@ -490,6 +514,16 @@
             <ref name="two_digit_decimal"/>
           </element>
         </optional>
+        <optional>
+          <element name="start_bank">
+            <ref name="two_digit_decimal"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="end_bank">
+            <ref name="two_digit_decimal"/>
+          </element>
+        </optional>
         <zeroOrMore>
           <ref name="break"/>
         </zeroOrMore>
@@ -501,11 +535,11 @@
       <interleave>
         <element name="started_at">
           <a:documentation>time and date the shift started</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <element name="ended_at">
           <a:documentation>time and date the shift ended</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <element name="break_minutes">
           <ref name="two_digit_decimal"/>
@@ -533,19 +567,19 @@
         </element>
         <element name="paid_at">
           <a:documentation>Time the paid in/out was entered</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <element name="payment_type_id">
           <a:documentation>Reference to payments table</a:documentation>
-          <data type="string"/>
+          <ref name="non_empty_string"/>
         </element>
         <element name="business_date">
           <a:documentation>Reporting date for paid in/out</a:documentation>
-          <data type="date"/>
+          <ref name="date_minInclusive"/>
         </element>
         <element name="last_modified_at">
           <a:documentation>time and date the paid in/out was last updated</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <optional>
           <element name="paid_inout_id">
@@ -584,15 +618,15 @@
         </element>
         <element name="deposited_at">
           <a:documentation>Time the deposit was entered</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <element name="business_date">
           <a:documentation>Reporting date of deposit</a:documentation>
-          <data type="date"/>
+          <ref name="date_minInclusive"/>
         </element>
         <element name="last_modified_at">
           <a:documentation>time and date the deposit was last updated</a:documentation>
-          <data type="dateTime"/>
+          <ref name="dateTime_minInclusive"/>
         </element>
         <optional>
           <element name="employee_id">
@@ -622,6 +656,7 @@
   <define name="non_empty_string">
     <data type="string">
       <param name="pattern">(.|\n|\r)*\S(.|\n|\r)*</param>
+      <param name="minLength">1</param>
     </data>
   </define>
   <define name="two_digit_decimal">
@@ -631,13 +666,23 @@
   </define>
   <define name="last_four_digits">
     <data type="string">
-      <param name="maxLength">20</param>
+    <param name="maxLength">20</param>
     </data>
   </define>
   <define name="non_negative_decimal">
     <data type="decimal">
       <param name="fractionDigits">2</param>
       <param name="minInclusive">0</param>
+    </data>
+  </define>
+  <define name="date_minInclusive">
+    <data type="date">
+      <param name="minInclusive">1900-01-01</param>
+    </data>
+  </define>
+  <define name="dateTime_minInclusive">
+    <data type="dateTime">
+      <param name="minInclusive">1900-01-01T00:00:00</param>
     </data>
   </define>
 </grammar>
