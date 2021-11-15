@@ -632,8 +632,7 @@ DELETE /v1/checks
 Authorization: eukj3pos_token…
 {
   "start_date":"2013-08-28",
-  "end_date":"2013-08-28",
-  "is_developer":true
+  "end_date":"2013-08-28"
 }
   
 Returns
