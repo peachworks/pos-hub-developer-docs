@@ -494,7 +494,7 @@ A check can have multiple items applied to it.  Here are the fields for an item
 | received             | integer    | total number of items affected by this discount (REQUIRED)   |
 | change               | decimal(2) | total amount of discounts for this discount (REQUIRED)       |
 | tip                  | string     | optional category id that this discount should be applied to |
-| tip\_processing\_fee | string     | employee ID for the manager that approved this discount      |
+| tip\_processing\_fee | string     | fee applied to credit card tips                              |
 | auto\_grat           | datetime   | date & time this discount was applied                        |
 | service\_charges     | decimal    | any service charges applied to the payment                   |
 | memo                 | text       | notes about the payment                                      |
